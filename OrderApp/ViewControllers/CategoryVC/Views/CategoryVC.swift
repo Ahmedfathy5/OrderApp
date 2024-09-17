@@ -48,7 +48,7 @@ extension CategoryVC: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
       
          let detailView = MenuVC()
-        detailView.category = viewModel.categories[indexPath.row]
+        detailView.menuViewModel.category = viewModel.categories[indexPath.row]
         navigationController?.pushViewController(detailView, animated: true)
     }
     

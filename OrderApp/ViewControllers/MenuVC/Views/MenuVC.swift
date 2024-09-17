@@ -10,34 +10,23 @@ import UIKit
 class MenuVC: UIViewController {
     
     @IBOutlet weak var menuTableView: UITableView!
-    var category: String = ""
-    let menuController = NetworkManager()
-    var menuItems: [MenuItem] = []
-    var imageLoadTasks: [IndexPath: Task<Void, Never>] = [:]
+    let menuViewModel: MenuViewModel = MenuViewModel(category: "")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = category.capitalized
+        title = menuViewModel.category.capitalized
         setUptableView()
-        Task.init {
-            do {
-                let menuItems = try await NetworkManager.shared.fetchMenuItem(forCategory: category)
-                updateUI(with: menuItems)
-            } catch  {
-                displayError(error, title: "Failed to fetch Menu Items for \(category)")
+        
+        //MARK: - when the data is updated it's reload the tableView.
+        menuViewModel.onDataLoaded = { [weak self] in
+            DispatchQueue.main.async {
+                self?.menuTableView.reloadData()
             }
         }
         
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        imageLoadTasks.forEach { key, value in value.cancel() }
-    }
-    
-    private func updateUI(with menuItems: [MenuItem]){
-        self.menuItems = menuItems
-        self.menuTableView.reloadData()
+        Task {
+            await menuViewModel.fetchMenuItems()
+        }
     }
     private func setUptableView() {
         menuTableView.dataSource = self
@@ -50,7 +39,7 @@ extension MenuVC: UITableViewDataSource, UITableViewDelegate {
         1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        menuItems.count
+        menuViewModel.menuItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -64,32 +53,27 @@ extension MenuVC: UITableViewDataSource, UITableViewDelegate {
     }
     func configureCell(_ cell: UITableViewCell, forCategoryAt indexPath: IndexPath) {
         guard let cell = cell as? MenuCell else { return }
-        
-        let menuItem = menuItems[indexPath.row]
+        let menuItem = menuViewModel.menuItems[indexPath.row]
         cell.itemImage.image = nil
         cell.itemName.text = menuItem.name
         cell.itemPrice.text = "$\(menuItem.price)"
-       
         
-       imageLoadTasks[indexPath] = Task.init {
-            if let image = try? await NetworkManager.shared.fetchImage(from: menuItem.imageURL) {
-                if let currentInedxPath = self.menuTableView.indexPath(for: cell), currentInedxPath == indexPath {
-                    cell.itemImage.image = image
+        Task {
+            await menuViewModel.fetchImage(for: indexPath, menuItem: menuItem) { [weak self] image in
+                DispatchQueue.main.async {
+                    if let currentIndexPath = self?.menuTableView.indexPath(for: cell), currentIndexPath == indexPath {
+                        cell.itemImage.image = image
+                    }
                 }
             }
-           imageLoadTasks[indexPath] = nil
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let menuDetailVC = MenuItemDetailVC(menuItem: menuItems[indexPath.row])
+        let menuDetailVC = MenuItemDetailVC(menuDetailViewModel: MenuDetailViewModel(menuItem: menuViewModel.menuItems[indexPath.row]))
+       
         self.navigationController?.pushViewController(menuDetailVC, animated: true)
     }
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        //MARK: - Cancel the image fetching task if it's no longer needed.
-        imageLoadTasks[indexPath]?.cancel()
-    }
-    
 }

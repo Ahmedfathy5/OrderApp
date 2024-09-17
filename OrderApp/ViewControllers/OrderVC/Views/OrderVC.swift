@@ -10,6 +10,7 @@ import UIKit
 class OrderVC: UIViewController {
 
     @IBOutlet weak var orderTableView: UITableView!
+    let orderViewModel: OrderViewModel = OrderViewModel()
     
     var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     var minutesToPrepareOrder = 1
@@ -39,17 +40,9 @@ class OrderVC: UIViewController {
     }
     
     func uploadOrder() {
-        let menuIDs = NetworkManager.shared.order.menuItems.map { $0.id }
-        
-        Task.init {
-            do {
-                let minutesToPrepare = try await NetworkManager.shared.submitOrder(forMenuIDs: menuIDs)
-                minutesToPrepareOrder = minutesToPrepare
-            } catch  {
-                displayError(error, title: "Order Submission Failed")
-            }
+        Task {
+                minutesToPrepareOrder = await orderViewModel.minutesToPrepareOrder() ?? 1
         }
-        
     }
     
     private func setUptableView() {
@@ -67,7 +60,7 @@ class OrderVC: UIViewController {
 
 extension OrderVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        NetworkManager.shared.order.menuItems.count
+        orderViewModel.tableViewCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -77,18 +70,20 @@ extension OrderVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func configure(_ cell: UITableViewCell, forItemAt indexPath: IndexPath) {
-        let menuItem = NetworkManager.shared.order.menuItems[indexPath.row]
+       
         guard let cell = cell as? OrderCell else { return }
+        let menuItem = orderViewModel.fetchMenuItem(indexPath: indexPath)
         
         cell.orderName.text = menuItem.name
         cell.orderPrice.text = "$\(menuItem.price)"
         cell.orderImage.image = UIImage(systemName: "photo.on.rectangle")
         Task.init {
-            if let image = try? await NetworkManager.shared.fetchImage(from: menuItem.imageURL) {
-                if let currentInedxPath = self.orderTableView.indexPath(for: cell), currentInedxPath == indexPath {
-                    cell.orderImage.image = image
-                }
-                
+           await orderViewModel.fetchImage(menuItem: menuItem, indexPath: indexPath) { [weak self] image in
+               DispatchQueue.main.async {
+                   if let currentIndexPath = self?.orderTableView.indexPath(for: cell), currentIndexPath == indexPath {
+                       cell.orderImage.image = image
+                   }
+               }
             }
         }
     }
@@ -99,7 +94,7 @@ extension OrderVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            NetworkManager.shared.order.menuItems.remove(at: indexPath.row)
+            orderViewModel.deleteRows(indexPath: indexPath)
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
