@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		000517C12C96F5B7000E09DF /* OrderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 000517C02C96F5B7000E09DF /* OrderCell.xib */; };
 		000517C22C96F5B7000E09DF /* OrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000517BF2C96F5B7000E09DF /* OrderCell.swift */; };
+		00129E0E2C99FBC80002C486 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00129E0D2C99FBC80002C486 /* SplashScreen.swift */; };
+		00129E102C99FDBE0002C486 /* CorenerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00129E0F2C99FDBE0002C486 /* CorenerRadius.swift */; };
 		00B5DECF2C9896E5007D399F /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B5DECE2C9896E5007D399F /* APIError.swift */; };
 		00B5DED12C989DAC007D399F /* HttpMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B5DED02C989DAC007D399F /* HttpMethod.swift */; };
 		00F0059D2C972EE6007D05FE /* OrderConfiramtionVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00F0059C2C972EE6007D05FE /* OrderConfiramtionVC.xib */; };
@@ -45,6 +47,8 @@
 /* Begin PBXFileReference section */
 		000517BF2C96F5B7000E09DF /* OrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCell.swift; sourceTree = "<group>"; };
 		000517C02C96F5B7000E09DF /* OrderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OrderCell.xib; sourceTree = "<group>"; };
+		00129E0D2C99FBC80002C486 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
+		00129E0F2C99FDBE0002C486 /* CorenerRadius.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CorenerRadius.swift; sourceTree = "<group>"; };
 		00B5DECE2C9896E5007D399F /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
 		00B5DED02C989DAC007D399F /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
 		00F0059B2C972EE6007D05FE /* OrderConfiramtionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderConfiramtionVC.swift; sourceTree = "<group>"; };
@@ -91,6 +95,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		00129E0C2C99FBA40002C486 /* SplashScreen */ = {
+			isa = PBXGroup;
+			children = (
+				00129E0D2C99FBC80002C486 /* SplashScreen.swift */,
+			);
+			path = SplashScreen;
+			sourceTree = "<group>";
+		};
 		00B5DED22C989F0D007D399F /* CategoryViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,6 +177,7 @@
 		00F044942C95C03A003EC942 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				00129E0C2C99FBA40002C486 /* SplashScreen */,
 				00F044972C95C079003EC942 /* CategoryVC */,
 				00F044952C95C058003EC942 /* OrderVC */,
 				00F0059A2C972EA7007D05FE /* OrderConfirmation */,
@@ -261,6 +274,7 @@
 			isa = PBXGroup;
 			children = (
 				00F044B72C95FCFF003EC942 /* ShowAlert.swift */,
+				00129E0F2C99FDBE0002C486 /* CorenerRadius.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -393,6 +407,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00129E102C99FDBE0002C486 /* CorenerRadius.swift in Sources */,
 				00FDA2A92C99B7C800113402 /* MenuDetailViewModel.swift in Sources */,
 				00F0448A2C95C011003EC942 /* CategoryVC.swift in Sources */,
 				00F0448E2C95C02A003EC942 /* MenuVC.swift in Sources */,
@@ -413,6 +428,7 @@
 				00F044AA2C95C611003EC942 /* OrderResponse.swift in Sources */,
 				00F044B82C95FCFF003EC942 /* ShowAlert.swift in Sources */,
 				00F044752C95B579003EC942 /* SceneDelegate.swift in Sources */,
+				00129E0E2C99FBC80002C486 /* SplashScreen.swift in Sources */,
 				00F044A62C95C5E7003EC942 /* MenuResponse.swift in Sources */,
 				00F044B12C95D6BF003EC942 /* NetworkManager.swift in Sources */,
 				00F044BF2C9607D3003EC942 /* MenuCell.swift in Sources */,

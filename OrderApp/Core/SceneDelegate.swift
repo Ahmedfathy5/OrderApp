@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -25,13 +26,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
        
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController =  TabbarVC()
+        let splashScreen = UIHostingController(rootView: SplashScreen())
+        window?.rootViewController =  splashScreen
         window?.makeKeyAndVisible()
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateOrderBadge), name: NetworkManager.orderUpdateNotification, object: nil)
         
-        orderTapbBarItem = (window?.rootViewController as? UITabBarController)?.viewControllers?[1].tabBarItem
         
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.showTabBar()
+        }
+        
+    }
+    func showTabBar() {
+        let tabBar = TabbarVC()
+        window?.rootViewController = tabBar
+        orderTapbBarItem = (window?.rootViewController as? UITabBarController)?.viewControllers?[1].tabBarItem
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

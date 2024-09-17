@@ -8,10 +8,41 @@
 import SwiftUI
 
 struct SplashScreen: View {
+    @State var isScaled: Bool = true
+    @State var showNextScreen: Bool = false
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Color.snoonuBackground.ignoresSafeArea()
+            VStack {
+                Image(.snoonu)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .scaleEffect(isScaled ? 0.75 : 1.3)
+                    .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: isScaled)
+                    .onAppear {
+                        isScaled.toggle()
+                    }
+                    .frame(maxHeight: .infinity)
+                    .frame(alignment: .bottom)
+                Spacer()
+                ZStack {
+                    Rectangle()
+                        .frame(width: 280, height: 50)
+                        .foregroundColor(.white)
+                        .cornerRadius(20, corners: [ .topLeft,.topRight, .bottomRight])
+                    VStack {
+                        Text("Made in El-Mansoura with love ❤️")
+                            .fontWeight(.semibold)
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
     }
 }
+
 
 #Preview {
     SplashScreen()
