@@ -18,9 +18,7 @@ class MenuVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = category.capitalized
-        menuTableView.dataSource = self
-        menuTableView.delegate = self
-        menuTableView.register(UINib(nibName: String(describing: MenuCell.self), bundle: nil), forCellReuseIdentifier: String(describing: MenuCell.self))
+        setUptableView()
         Task.init {
             do {
                 let menuItems = try await NetworkManager.shared.fetchMenuItem(forCategory: category)
@@ -40,6 +38,11 @@ class MenuVC: UIViewController {
     private func updateUI(with menuItems: [MenuItem]){
         self.menuItems = menuItems
         self.menuTableView.reloadData()
+    }
+    private func setUptableView() {
+        menuTableView.dataSource = self
+        menuTableView.delegate = self
+        menuTableView.register(UINib(nibName: String(describing: MenuCell.self), bundle: nil), forCellReuseIdentifier: String(describing: MenuCell.self))
     }
 }
 extension MenuVC: UITableViewDataSource, UITableViewDelegate {

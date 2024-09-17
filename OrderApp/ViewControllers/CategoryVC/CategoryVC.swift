@@ -10,39 +10,25 @@ import UIKit
 class CategoryVC: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    private let menuController = NetworkManager()
-   private var categories: [String] = []
+   
+   private let viewModel: CategoryViewModel = CategoryViewModel()
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Resturants"
-        Task.init {
-            do {
-                let categories = try await NetworkManager.shared.fetchCategories()
-                updateUI(with: categories)
-            } catch  {
-                displayError(error, title: "Failed to fetch Categories.")
-            }
-        }
-        
+        setUpTableView()
+    }
+    private func setUpTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: String(describing: CategoryCell.self), bundle: nil), forCellReuseIdentifier: String(describing:  CategoryCell.self))
-        
     }
- 
-  
-   private func updateUI(with categories: [String]){
-        self.categories = categories
-       self.tableView.reloadData()
-    }
-    
 }
 extension CategoryVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        categories.count
+        viewModel.categories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -52,7 +38,7 @@ extension CategoryVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func configureCell(_ cell: UITableViewCell, forCategoryAt indexPath: IndexPath) {
-        let category = categories[indexPath.row]
+        let category = viewModel.categories[indexPath.row]
         var content = cell.defaultContentConfiguration()
         content.text = category.capitalized
         cell.contentConfiguration = content
@@ -62,13 +48,8 @@ extension CategoryVC: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
       
          let detailView = MenuVC()
-        
-        detailView.category = categories[indexPath.row]
-        
+        detailView.category = viewModel.categories[indexPath.row]
         navigationController?.pushViewController(detailView, animated: true)
     }
-    
-    
-    
     
 }
