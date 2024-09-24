@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 struct MenuItem: Codable {
     var id: Int
     var name: String
@@ -21,7 +20,6 @@ struct MenuItem: Codable {
         case detailText = "description"
         case imageURL = "image_url"
     }
-    
 }
 
 

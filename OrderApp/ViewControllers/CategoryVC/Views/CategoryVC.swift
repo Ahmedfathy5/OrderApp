@@ -23,6 +23,7 @@ class CategoryVC: UIViewController {
         tableView.register(UINib(nibName: String(describing: CategoryCell.self), bundle: nil), forCellReuseIdentifier: String(describing:  CategoryCell.self))
     }
 }
+
 extension CategoryVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         1
