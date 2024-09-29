@@ -53,7 +53,7 @@ class NetworkManager {
     func submitOrder(forMenuIDs menuIDs: [Int]) async throws -> MinutesToPrepare {
         guard let orderURL = baseURL?.appendingPathComponent("order") else { throw APIError.orderRequestFailed }
         var request = URLRequest(url: orderURL)
-        request.httpMethod = HttpMethod.post.rawValue
+        request.httpMethod = RequestMethod.post.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let menuIDsDict = ["menuIds": menuIDs]
         let jsonData = try JSONEncoder().encode(menuIDsDict)

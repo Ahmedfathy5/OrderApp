@@ -16,6 +16,9 @@ class CategoryVC: UIViewController {
         super.viewDidLoad()
         navigationItem.title = "Resturants"
         setUpTableView()
+      
+          
+        
     }
     private func setUpTableView() {
         tableView.delegate = self
