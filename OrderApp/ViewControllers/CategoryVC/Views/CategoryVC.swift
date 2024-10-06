@@ -20,7 +20,7 @@ class CategoryVC: UIViewController {
     private func setUpTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UINib(nibName: String(describing: CategoryCell.self), bundle: nil), forCellReuseIdentifier: String(describing:  CategoryCell.self))
+        tableView.registerNib(cell: CategoryCell.self)
     }
 }
 
@@ -33,7 +33,7 @@ extension CategoryVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing:  CategoryCell.self), for: indexPath) as? CategoryCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CategoryCell.reuseIdentifier) else { return UITableViewCell() }
         configureCell(cell, forCategoryAt: indexPath)
         return cell
     }
